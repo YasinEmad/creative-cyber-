@@ -15,7 +15,7 @@ export const Navbar: React.FC = () => {
   const navLinks = [
     { to: '/courses', label: 'COURSES' },
     { to: '/faq', label: 'FAQ' },
-    { to: '/contact', label: 'CONTACT' }
+    { to: '/dashboard', label: 'DASHBOARD' } // Added Dashboard link
   ];
 
   return (

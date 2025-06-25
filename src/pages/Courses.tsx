@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { CourseCard } from "../components/CourseCard";
-import { courses } from "../data/courses";
+import { useEffect, useState } from "react";
+import { courses as staticCourses } from "../data/courses";
 
 const FloatingShape = ({ delay = 0 }) => (
   <motion.div
@@ -22,6 +23,13 @@ const FloatingShape = ({ delay = 0 }) => (
 );
 
 export const Courses = () => {
+  const [courses, setCourses] = useState(staticCourses);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("courses");
+    if (stored) setCourses(JSON.parse(stored));
+  }, []);
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-gray-900">
       {/* Animated Background */}

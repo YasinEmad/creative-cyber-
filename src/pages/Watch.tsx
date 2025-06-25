@@ -1,14 +1,22 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { VideoPlayer } from "../components/VideoPlayer";
-import { courses } from "../data/courses";
-import { lessons } from "../data/lessons";
+import { courses as staticCourses } from "../data/courses";
+import { lessons as staticLessons } from "../data/lessons";
 import { useState, useEffect } from "react";
 import { FiClock, FiBookOpen, FiCheck, FiArrowLeft } from "react-icons/fi";
 
 export const Watch = () => {
   const { id } = useParams<{ id: string }>();
   const courseId = parseInt(id || "1", 10);
+  const [courses, setCourses] = useState(staticCourses);
+  const [lessons, setLessons] = useState(staticLessons);
+  useEffect(() => {
+    const storedCourses = localStorage.getItem("courses");
+    if (storedCourses) setCourses(JSON.parse(storedCourses));
+    const storedLessons = localStorage.getItem("lessons");
+    if (storedLessons) setLessons(JSON.parse(storedLessons));
+  }, []);
   const course = courses.find((c) => c.id === courseId);
   const courseLessons = lessons.filter((l) => l.courseId === courseId);
   const [selectedLesson, setSelectedLesson] = useState(courseLessons[0]);
@@ -21,6 +29,12 @@ export const Watch = () => {
       setCompletedLessons(JSON.parse(saved));
     }
   }, [courseId]);
+
+  useEffect(() => {
+    // Update selectedLesson if lessons change
+    setSelectedLesson(courseLessons[0]);
+    // eslint-disable-next-line
+  }, [lessons, courseId]);
 
   const markLessonComplete = (lessonId: number) => {
     const newCompleted = [...completedLessons, lessonId];
